@@ -1,6 +1,6 @@
 # Auto-Loc - Architecture Cloud 🚗💨
 
-![Auto-Loc Banner](https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1200&q=80)
+![Auto-Loc Banner]https://www.google.com/imgres?q=allocation%20de%20voiture%20modernes&imgurl=https%3A%2F%2Fminute-car.com%2Fstorage%2Fvoitures%2F01K4Z723KGKHBJYSSH7SHT3B8C.webp&imgrefurl=https%3A%2F%2Fminute-car.com%2Flocation-voiture%2Flocation-voiture-hundai-tucson-aeroport-international-mohammed-v-casablanca-meilleures-affaires-et-offres&docid=GLfzMo2AQakmrM&tbnid=lHHSaHnHMUQPmM&vet=12ahUKEwi6v_CI0paUAxUBSuUKHYtPGhsQnPAOegQIQBAB..i&w=1000&h=600&hcb=2&ved=2ahUKEwi6v_CI0paUAxUBSuUKHYtPGhsQnPAOegQIQBAB
 
 ## 📌 Présentation du Projet
 **Auto-Loc** est une plateforme moderne de location de véhicules développée dans le cadre du module **Architecture Cloud (SI 2CP)** à l'**ESTIN** (Promotion 2026). 
@@ -54,7 +54,7 @@ Ouvrez [http://localhost:3000](http://localhost:3000) pour voir le résultat.
 
 ## 👥 Équipe
 - **Amel ved**
-- [Binôme]
-
+-  **Ahmed**
+ -**Ghiles**
 ---
 *Projet réalisé sous l'approche **Vibe Programming** : focus sur l'intention, l'agilité et l'assistance IA pour une livraison rapide et de haute qualité.*
