@@ -10,6 +10,7 @@ import Link from 'next/link';
 export default function CarDetailsPage({ params }: { params: { id: string } }) {
   const [car, setCar] = useState<CarType | null>(null);
   const [loading, setLoading] = useState(true);
+  const [pageError, setPageError] = useState<string | null>(null);
   
   // Reservation state
   const [startDate, setStartDate] = useState('');
@@ -21,9 +22,14 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     async function loadCar() {
-      const data = await getCarById(params.id);
-      setCar(data || null);
-      setLoading(false);
+      try {
+        const data = await getCarById(params.id);
+        setCar(data || null);
+      } catch (err: any) {
+        setPageError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
     loadCar();
   }, [params.id]);
@@ -33,15 +39,19 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
     if (!car || !startDate || !endDate || !file) return;
     
     setIsSubmitting(true);
+    setPageError(null);
     const res = await createReservation(car.id, startDate, endDate, file);
     setIsSubmitting(false);
     
     if (res.success) {
       setSuccess(true);
+    } else {
+      setPageError(res.error || 'Server down, try again later please!');
     }
   };
 
   if (loading) return <div className="flex-1 flex items-center justify-center">Loading details...</div>;
+  if (pageError && !car) return <div className="flex-1 flex items-center justify-center text-red-400 font-bold text-xl">{pageError}</div>;
   if (!car) return <div className="flex-1 flex items-center justify-center">Car not found.</div>;
 
   if (success) {
@@ -107,6 +117,12 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
         <div>
           <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md sticky top-28">
             <h3 className="text-2xl font-bold mb-6">Book this vehicle</h3>
+            
+            {pageError && (
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm">
+                {pageError}
+              </div>
+            )}
             
             <form onSubmit={handleBook} className="space-y-6">
               <div className="grid grid-cols-2 gap-4">

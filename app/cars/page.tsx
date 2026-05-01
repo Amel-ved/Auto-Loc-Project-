@@ -10,12 +10,18 @@ import Link from 'next/link';
 export default function CarsPage() {
   const [cars, setCars] = useState<CarType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadCars() {
-      const data = await getCars();
-      setCars(data);
-      setLoading(false);
+      try {
+        const data = await getCars();
+        setCars(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
     loadCars();
   }, []);
@@ -32,6 +38,10 @@ export default function CarsPage() {
           {[1, 2, 3].map((i) => (
             <div key={i} className="animate-pulse bg-white/5 rounded-2xl h-96 border border-white/5" />
           ))}
+        </div>
+      ) : error ? (
+        <div className="bg-red-500/10 border border-red-500/50 rounded-2xl p-8 text-center text-red-400">
+          <p className="text-xl font-bold">{error}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

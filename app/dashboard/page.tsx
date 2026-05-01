@@ -10,16 +10,22 @@ export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadDashboard() {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-      if (currentUser) {
-        const userRes = await getUserReservations(currentUser.id);
-        setReservations(userRes);
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+        if (currentUser) {
+          const userRes = await getUserReservations(currentUser.id);
+          setReservations(userRes);
+        }
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     loadDashboard();
   }, []);
@@ -53,7 +59,11 @@ export default function DashboardPage() {
         <FileText className="w-6 h-6 text-indigo-400" /> My Reservations
       </h2>
 
-      {reservations.length === 0 ? (
+      {error ? (
+        <div className="bg-red-500/10 border border-red-500/50 rounded-2xl p-8 text-center text-red-400 mb-8">
+          <p className="text-xl font-bold">{error}</p>
+        </div>
+      ) : reservations.length === 0 ? (
         <div className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center">
           <Car className="w-12 h-12 text-neutral-600 mx-auto mb-4" />
           <h3 className="text-xl font-medium mb-2">No reservations yet</h3>
