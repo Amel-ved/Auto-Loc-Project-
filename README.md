@@ -15,14 +15,13 @@ L'objectif est de concevoir une infrastructure **scalable, sécurisée, et optim
 
 Notre projet modélise le métier de la location de voitures. Voici comment notre logique métier correspond parfaitement à l'architecture de notre base de données (Supabase / PostgreSQL) :
 
-- **Table A (Les Acteurs) : `profiles` (Clients)**
-  Elle contient les informations des utilisateurs inscrits. Elle est directement liée au système d'authentification sécurisé de Supabase Auth.
-- **Table B (Les Ressources) : `cars` (Voitures)**
-  Elle représente notre catalogue de véhicules disponibles à la location (marque, modèle, catégorie, prix journalier, disponibilité).
-- **Table C (Les Interactions) : `reservations` (Réservations)**
-  C'est la table de jointure métier. Elle enregistre le fait qu'un Client (Table A) a loué une Voiture (Table B) pour une période donnée, en stockant le prix total et le statut.
-- **Le Fichier (Storage) : Photo du Permis**
-  Lors de la réservation, le client doit obligatoirement uploader une photo ou un scan de son permis de conduire pour des raisons d'assurance et de sécurité.
+
+| Entité | Correspondance Métier | Description |
+| :--- | :--- | :--- |
+| **Table A**<br>*(Utilisateurs)* | 👤 **Clients** | Utilisateurs authentifiés et gérés de manière sécurisée via **Supabase Auth**. |
+| **Table B**<br>*(Ressources)* | 🚗 **Voitures** | Le catalogue des véhicules disponibles à la location. |
+| **Table C**<br>*(Interactions)* | 🤝 **Réservations** | La table de jointure reliant un *Client* à une *Voiture* (avec des dates et des statuts). |
+| **Fichier** *(Storage)* | 📄 **Photo du Permis** | Document justificatif uploadé de manière sécurisée lors d'une réservation. |
 
 ---
 
