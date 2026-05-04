@@ -57,11 +57,8 @@ export async function getCarById(id: string): Promise<Car | undefined> {
 export async function login(email: string, password: string):Promise<{success: boolean, error?: string}> {
   if (USE_MOCK) {
     await new Promise((resolve) => setTimeout(resolve, 800));
-    if (email === 'admin@admin.com' && password === 'admin') {
-      if (typeof window !== 'undefined') localStorage.setItem('autoloc_auth', MOCK_USER.id);
-      return { success: true };
-    }
-    return { success: false, error: 'Invalid email or password. Use admin@admin.com / admin' };
+    if (typeof window !== 'undefined') localStorage.setItem('autoloc_auth', MOCK_USER.id);
+    return { success: true };
   }
 
   if (!HAS_SUPABASE_KEYS) {
@@ -81,6 +78,7 @@ export async function login(email: string, password: string):Promise<{success: b
 export async function signUp(email: string, password: string, full_name: string): Promise<{success: boolean, error?: string, needsEmailConfirmation?: boolean}> {
   if (USE_MOCK) {
     await new Promise((resolve) => setTimeout(resolve, 800));
+    if (typeof window !== 'undefined') localStorage.setItem('autoloc_auth', MOCK_USER.id);
     return { success: true };
   }
 
