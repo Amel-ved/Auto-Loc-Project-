@@ -6,6 +6,7 @@ import { getCarById, createReservation } from '@/lib/api';
 import { Car as CarType } from '@/lib/mock-data';
 import { Calendar, CreditCard, ShieldCheck, CheckCircle2, UploadCloud, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
+import { formatPrice } from '@/lib/utils';
 
 export default function CarDetailsPage({ params }: { params: { id: string } }) {
   const [car, setCar] = useState<CarType | null>(null);
@@ -98,7 +99,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
           <p className="text-xl text-neutral-400 mb-6">{car.year} • Automatic</p>
 
           <div className="flex items-center gap-4 text-2xl font-bold text-indigo-400 mb-8 pb-8 border-b border-white/10">
-            ${car.price_per_day} <span className="text-base text-neutral-500 font-normal">/ day</span>
+            {formatPrice(car.price_per_day)} <span className="text-base text-neutral-500 font-normal">/ day</span>
           </div>
 
           <div className="space-y-4">

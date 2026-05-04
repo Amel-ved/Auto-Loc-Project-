@@ -203,7 +203,7 @@ export async function createReservation(
       end_date: endDate,
       status: 'pending',
       license_photo_url: 'mock-uploaded-file.jpg',
-      total_price: 500,
+      total_price: 100000,
     });
     return { success: true };
   }

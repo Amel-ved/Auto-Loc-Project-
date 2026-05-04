@@ -6,6 +6,7 @@ import { Car as CarType } from '@/lib/mock-data';
 import { motion } from 'framer-motion';
 import { Settings, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import { formatPrice } from '@/lib/utils';
 
 export default function CarsPage() {
   const [cars, setCars] = useState<CarType[]>([]);
@@ -81,7 +82,7 @@ export default function CarsPage() {
                 
                 <div className="mt-auto flex items-center justify-between">
                   <div>
-                    <span className="text-2xl font-bold">${car.price_per_day}</span>
+                    <span className="text-2xl font-bold">{formatPrice(car.price_per_day)}</span>
                     <span className="text-neutral-500 text-sm">/day</span>
                   </div>
                   

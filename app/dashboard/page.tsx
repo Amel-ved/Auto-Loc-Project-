@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Car, Calendar, CreditCard, LogOut, FileText } from 'lucide-react';
 import { getUserReservations, getCurrentUser } from '@/lib/api';
 import { Reservation, User, MOCK_CARS } from '@/lib/mock-data';
+import { formatPrice } from '@/lib/utils';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -98,7 +99,7 @@ export default function DashboardPage() {
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-2xl font-bold">${res.total_price}</span>
+                      <span className="text-2xl font-bold">{formatPrice(res.total_price)}</span>
                       <p className="text-neutral-500 text-sm">Total paid</p>
                     </div>
                   </div>
