@@ -7,6 +7,7 @@ import { Car as CarType } from '@/lib/mock-data';
 import { Calendar, CreditCard, ShieldCheck, CheckCircle2, UploadCloud, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { formatPrice } from '@/lib/utils';
+import Tesseract from 'tesseract.js';
 
 export default function CarDetailsPage({ params }: { params: { id: string } }) {
   const [car, setCar] = useState<CarType | null>(null);
@@ -19,6 +20,11 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  
+  // OCR Scan State
+  const [extractedText, setExtractedText] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -48,6 +54,35 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
       setSuccess(true);
     } else {
       setPageError(res.error || 'Server down, try again later please!');
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] || null;
+    setFile(selectedFile);
+    
+    if (selectedFile && selectedFile.type.startsWith('image/')) {
+      setIsScanning(true);
+      setExtractedText(null);
+      try {
+        const result = await Tesseract.recognize(selectedFile, 'eng', {
+          logger: (m) => console.log(m)
+        });
+        const text = result.data.text;
+        
+        // Extract a few lines to show that it actually scanned
+        const lines = text.split('\n').filter(l => l.trim().length > 3);
+        if (lines.length > 0) {
+          setExtractedText(lines.slice(0, 3).join(' | '));
+        } else {
+          setExtractedText('Scan complete. No readable text found.');
+        }
+      } catch (err) {
+        console.error("OCR Error", err);
+        setExtractedText('Scan failed.');
+      } finally {
+        setIsScanning(false);
+      }
     }
   };
 
@@ -159,7 +194,7 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
                     type="file" 
                     className="hidden" 
                     ref={fileInputRef}
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    onChange={handleFileChange}
                     accept="image/*,.pdf"
                     required
                   />
@@ -167,6 +202,16 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
                     <div className="flex flex-col items-center text-green-400">
                       <CheckCircle2 className="w-8 h-8 mb-2" />
                       <span className="font-medium text-sm">{file.name}</span>
+                      {isScanning ? (
+                        <span className="text-xs text-neutral-400 mt-2 flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" /> Scanning license...
+                        </span>
+                      ) : extractedText ? (
+                        <div className="mt-4 p-3 bg-black/40 border border-white/10 rounded-xl text-xs text-neutral-300 text-left w-full overflow-hidden backdrop-blur-sm">
+                          <span className="text-indigo-400 font-bold block mb-1">🔍 OCR Scan Result:</span>
+                          <span className="opacity-80">{extractedText}</span>
+                        </div>
+                      ) : null}
                     </div>
                   ) : (
                     <div className="flex flex-col items-center text-neutral-400">
@@ -203,3 +248,4 @@ export default function CarDetailsPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
