@@ -71,9 +71,6 @@ npm run dev
 ```
 
 
-## 👥 5. Équipe du Projet
-- **Amel ved**
-- **Ahmed**
-- **Ghiles**
+
 
 
