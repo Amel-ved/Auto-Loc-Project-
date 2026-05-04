@@ -98,7 +98,21 @@ create policy "Users view own reservations"
 create policy "Users can insert own reservations"
   on public.reservations for insert with check (auth.uid() = user_id);
 
-create policy "Auth users can upload documents"
+-- Expanded Storage Policies for 'documents' bucket
+create policy "Public Access to Documents"
+  on storage.objects for select using (bucket_id = 'documents');
+
+create policy "Authenticated users can upload documents"
   on storage.objects for insert with check (
+    bucket_id = 'documents' and auth.role() = 'authenticated'
+  );
+
+create policy "Users can update their own documents"
+  on storage.objects for update with check (
+    bucket_id = 'documents' and auth.role() = 'authenticated'
+  );
+
+create policy "Users can delete their own documents"
+  on storage.objects for delete using (
     bucket_id = 'documents' and auth.role() = 'authenticated'
   );
