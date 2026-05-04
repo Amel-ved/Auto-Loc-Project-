@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Car, Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
-import { login } from '@/lib/api';
+import { login, signUp, HAS_SUPABASE_KEYS } from '@/lib/api';
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,9 +27,19 @@ export default function LoginPage() {
         setLoading(false);
       }
     } else {
-      // Mock signup -> auto login for demo
-      const res = await login('admin@admin.com', 'admin');
-      if (res.success) window.location.href = '/dashboard';
+      const res = await signUp(email, password, fullName);
+      if (res.success) {
+        if (res.needsEmailConfirmation) {
+          setError('Account created. Please confirm your email before logging in.');
+          setIsLogin(true);
+          setLoading(false);
+        } else {
+          window.location.href = '/dashboard';
+        }
+      } else {
+        setError(res.error || 'Signup failed');
+        setLoading(false);
+      }
     }
   };
 
@@ -52,6 +63,14 @@ export default function LoginPage() {
           {isLogin ? 'Sign in to manage your rentals' : 'Join AutoLoc and start exploring'}
         </p>
 
+        {!HAS_SUPABASE_KEYS && (
+          <div className="mb-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-200 text-sm">
+            <p>
+              Supabase is not configured yet. Create <code className="bg-black/20 px-1 rounded">.env.local</code> from <code className="bg-black/20 px-1 rounded">.env.example</code>, add your Supabase URL and anon key, then set <code className="bg-black/20 px-1 rounded">NEXT_PUBLIC_USE_MOCK_DATA=false</code>.
+            </p>
+          </div>
+        )}
+
         {error && (
           <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-400 text-sm">
             <AlertCircle className="w-5 h-5 shrink-0" />
@@ -67,6 +86,8 @@ export default function LoginPage() {
                 <input 
                   type="text" 
                   placeholder="John Doe"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required
                 />

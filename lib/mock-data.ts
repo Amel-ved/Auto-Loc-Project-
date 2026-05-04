@@ -68,6 +68,26 @@ export const MOCK_CARS: Car[] = [
     category: 'Sedan',
     status: 'available',
   },
+  {
+    id: 'car-5',
+    brand: 'Tesla',
+    model: 'Model S Plaid',
+    year: 2025,
+    price_per_day: 400,
+    image_url: 'https://images.unsplash.com/photo-1612197520383-0f22fc811c23?auto=format&fit=crop&q=80&w=1000',
+    category: 'Luxury',
+    status: 'available',
+  },
+  {
+    id: 'car-6',
+    brand: 'Land Rover',
+    model: 'Range Rover Sport',
+    year: 2024,
+    price_per_day: 310,
+    image_url: 'https://images.unsplash.com/photo-1542367597-1835f5cbf1f0?auto=format&fit=crop&q=80&w=1000',
+    category: 'SUV',
+    status: 'available',
+  },
 ];
 
 export const MOCK_USER: User = {

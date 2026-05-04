@@ -3,11 +3,15 @@
 import Link from 'next/link';
 import { Car, LayoutDashboard, UserCircle, LogOut } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { getCurrentUser, logout } from '@/lib/api';
 import { User } from '@/lib/mock-data';
 
 export function Navbar() {
   const [user, setUser] = useState<User | null>(null);
+  const pathname = usePathname();
+  const isCarsActive = pathname?.startsWith('/cars');
+  const isDashboardActive = pathname?.startsWith('/dashboard');
 
   useEffect(() => {
     // Check auth status on mount
@@ -28,14 +32,20 @@ export function Navbar() {
           <span className="text-2xl font-bold tracking-tight text-white">Auto<span className="text-indigo-500">Loc</span></span>
         </Link>
         
-        <div className="flex items-center gap-8 text-sm font-medium">
-          <Link href="/cars" className="text-neutral-400 hover:text-white transition-colors">
+        <div className="flex items-center gap-10 text-sm font-medium">
+          <Link
+            href="/cars"
+            className={`transition-colors ${isCarsActive ? 'text-white font-bold underline decoration-indigo-500 decoration-2 underline-offset-4' : 'text-neutral-400 hover:text-white'}`}
+          >
             Fleet
           </Link>
           
           {user ? (
             <>
-              <Link href="/dashboard" className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
+              <Link
+                href="/dashboard"
+                className={`flex items-center gap-2 transition-colors ${isDashboardActive ? 'text-white font-bold underline decoration-indigo-500 decoration-2 underline-offset-4' : 'text-neutral-400 hover:text-white'}`}
+              >
                 <LayoutDashboard className="w-4 h-4" />
                 Dashboard
               </Link>

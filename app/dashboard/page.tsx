@@ -55,7 +55,7 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+      <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2 border-b-2 border-indigo-500 pb-2">
         <FileText className="w-6 h-6 text-indigo-400" /> My Reservations
       </h2>
 
